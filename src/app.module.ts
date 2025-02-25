@@ -1,3 +1,4 @@
+// filepath: /c:/Users/santi/Downloads/Proyecto (1)/proyecto-final/src/app.module.ts
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -20,16 +21,23 @@ import { UsuarioRolModule } from './Usuario_Rol/Usuario_Rol.module';
 import { Detalle_PedidoModule } from './Detalle_Pedido/detalle_pedido.module';
 import { ProveedorModule } from './proveedor/proveedor.module';
 
+import * as dotenv from 'dotenv';
+dotenv.config();
+
+console.log('DB_HOST:', process.env.DB_HOST);
+console.log('DB_PORT:', process.env.DB_PORT);
+console.log('DB_USERNAME:', process.env.DB_USERNAME);
+console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
+console.log('DB_DATABASE:', process.env.DB_DATABASE);
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-    
       type: 'postgres',
       host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT??'5432',10),
+      port: parseInt(process.env.DB_PORT ?? '5432', 10),  // Asegurarse que DB_PORT es un número
       username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
+      password: String(process.env.DB_PASSWORD),  // Asegurarse de que es una cadena
       database: process.env.DB_DATABASE,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       autoLoadEntities: true,
@@ -47,8 +55,7 @@ import { ProveedorModule } from './proveedor/proveedor.module';
     ReporteModule,
     UsuarioModule,
     UsuarioRolModule,
-    Detalle_PedidoModule
-
+    Detalle_PedidoModule,
   ],
   controllers: [AppController],
   providers: [AppService],
